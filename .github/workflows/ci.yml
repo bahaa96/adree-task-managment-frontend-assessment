@@ -1,0 +1,99 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          echo "Installing dependencies..."
+          npm ci
+
+      - name: Run type check
+        run: |
+          echo "Running TypeScript type checking..."
+          npm run typecheck
+
+      - name: Run linter
+        run: |
+          echo "Running ESLint..."
+          npm run lint
+
+      - name: Run unit tests
+        run: |
+          echo "Running unit tests..."
+          npm run test
+
+      - name: Run tests with coverage
+        run: |
+          echo "Running tests with coverage..."
+          npm run test:coverage
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage/lcov.info
+          fail_ci_if_error: true
+
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          echo "Installing dependencies..."
+          npm ci
+
+      - name: Build application
+        run: |
+          echo "Building application..."
+          npm run build
+
+      - name: Analyze bundle size
+        run: |
+          echo "Analyzing bundle size..."
+          npx bundlesize
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-files
+          path: dist/
+
+  deploy:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs: [build, test]
+    environment: staging
+    steps:
+      - name: Deploy to staging
+        run: |
+          echo "Deploying to staging..."
+          # Add deployment steps here
