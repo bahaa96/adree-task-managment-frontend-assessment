@@ -14,7 +14,7 @@ import {
 } from 'recharts';
 import { Card } from '@/components';
 import { Badge } from '@/components';
-import { useAllTasks } from '@/hooks';
+import { useAllTasks } from './useAllTasks';
 import { Task, TaskStatus, TaskCategory } from '@/domain-models';
 import { cn } from '@/lib/cn';
 

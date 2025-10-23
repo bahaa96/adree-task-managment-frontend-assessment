@@ -4,7 +4,8 @@ import { Card } from '@/components';
 import { Badge } from '@/components';
 import { Button } from '@/components';
 import { LoadingSpinner } from '@/components';
-import { useAllTasks, useIsMobile } from '@/hooks';
+import { useAllTasks } from '../Dashboard/useAllTasks';
+import { useIsMobile, useInfiniteScroll } from './useMediaQuery';
 import { Task, TaskStatus, TaskCategory } from '@/domain-models';
 import { cn } from '@/lib/cn';
 

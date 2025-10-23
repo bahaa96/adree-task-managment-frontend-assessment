@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components';
-import { useIsMobile } from '@/hooks';
+import { useIsMobile } from './useMediaQuery';
 import { cn } from '@/lib/cn';
 
 interface LayoutProps {
