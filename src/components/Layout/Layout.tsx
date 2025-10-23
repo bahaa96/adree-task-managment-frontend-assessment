@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect, ReactNode } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components';
 import { useIsMobile } from '@/hooks';
@@ -10,7 +11,6 @@ interface LayoutProps {
 
 export const Layout = ({ children }: LayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const location = useLocation();
   const isMobile = useIsMobile();
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -112,13 +112,9 @@ export const Layout = ({ children }: LayoutProps) => {
       {/* Sidebar */}
       <div
         ref={sidebarRef}
-        className={cn(
-          'fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0',
-          {
-            'translate-x-0': sidebarOpen || !isMobile,
-            '-translate-x-full': !sidebarOpen && isMobile,
-          }
-        )}
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${
+          sidebarOpen || !isMobile ? 'translate-x-0' : '-translate-x-full'
+        }`}
       >
         <div className="flex h-full flex-col">
           {/* Sidebar Header */}
@@ -144,22 +140,16 @@ export const Layout = ({ children }: LayoutProps) => {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={cn(
-                    'group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-150',
-                    {
-                      'bg-primary-100 text-primary-700 border-l-4 border-primary-600': isActive,
-                      'text-gray-700 hover:bg-gray-100 hover:text-gray-900': !isActive,
-                    }
-                  )}
+                  className={`group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-150 ${
+                      isActive
+                        ? 'bg-primary-100 text-primary-700 border-l-4 border-primary-600'
+                        : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                    }`}
                   aria-current={isActive ? 'page' : undefined}
                 >
-                  <span className={cn(
-                    'flex-shrink-0 mr-3 h-5 w-5',
-                    {
-                      'text-primary-500': isActive,
-                      'text-gray-400 group-hover:text-gray-500': !isActive,
-                    }
-                  )}>
+                  <span className={`flex-shrink-0 mr-3 h-5 w-5 ${
+                      isActive ? 'text-primary-500' : 'text-gray-400 group-hover:text-gray-500'
+                    }`}>
                     {item.icon}
                   </span>
                   <span className="flex-1">{item.name}</span>
@@ -171,13 +161,7 @@ export const Layout = ({ children }: LayoutProps) => {
       </div>
 
       {/* Main Content */}
-      <div className={cn(
-        'lg:pl-0',
-        {
-          'lg:pl-16': sidebarCollapsed,
-          'lg:pl-64': !sidebarCollapsed && !isMobile,
-        }
-      )}>
+      <div className="lg:pl-0">
         {/* Header */}
         <header
           className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30"
@@ -221,13 +205,11 @@ export const Layout = ({ children }: LayoutProps) => {
                       <Link
                         key={item.name}
                         to={item.href}
-                        className={cn(
-                          'text-sm font-medium transition-colors duration-150',
-                          {
-                            'text-primary-600 border-b-2 border-primary-600 pb-1': isActive,
-                            'text-gray-500 hover:text-gray-900': !isActive,
-                          }
-                        )}
+                        className={`text-sm font-medium transition-colors duration-150 ${
+                            isActive
+                              ? 'text-primary-600 border-b-2 border-primary-600 pb-1'
+                              : 'text-gray-500 hover:text-gray-900'
+                          }`}
                         aria-current={isActive ? 'page' : undefined}
                       >
                         {item.name}
@@ -267,22 +249,14 @@ export const Layout = ({ children }: LayoutProps) => {
                   <Link
                     key={item.name}
                     to={item.href}
-                    className={cn(
-                      'flex flex-col items-center justify-center py-2 px-3 text-xs font-medium transition-colors duration-150',
-                      {
-                        'text-primary-600': isActive,
-                        'text-gray-500 hover:text-gray-900': !isActive,
-                      }
-                    )}
+                    className={`flex flex-col items-center justify-center py-2 px-3 text-xs font-medium transition-colors duration-150 ${
+                      isActive ? 'text-primary-600' : 'text-gray-500 hover:text-gray-900'
+                    }`}
                     aria-current={isActive ? 'page' : undefined}
                   >
-                    <span className={cn(
-                      'mb-1 h-6 w-6',
-                      {
-                        'text-primary-500': isActive,
-                        'text-gray-400': !isActive,
-                      }
-                    )}>
+                    <span className={`mb-1 h-6 w-6 ${
+                      isActive ? 'text-primary-500' : 'text-gray-400'
+                    }`}>
                       {item.icon}
                     </span>
                     {item.name}
