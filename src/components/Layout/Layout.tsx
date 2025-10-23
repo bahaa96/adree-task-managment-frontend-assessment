@@ -2,19 +2,15 @@ import { useState, useRef, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components';
-import { useIsMobile } from './useMediaQuery';
 import { cn } from '@/lib/cn';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-export const Layout = ({ children }: LayoutProps) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const location = useLocation();
-  const isMobile = useIsMobile();
-  const sidebarRef = useRef<HTMLDivElement>(null);
-  const backdropRef = useRef<HTMLDivElement>(null);
+
+
+const isMobile = () => false; // Simplified for single language use
 
   // Close sidebar on mobile when clicking outside or on route change
   useEffect(() => {
