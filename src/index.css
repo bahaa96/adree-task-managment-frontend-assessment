@@ -1,68 +1,127 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
+@layer base {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    /* Color tokens */
+    --color-primary: 14 165 233;
+    --color-secondary: 100 116 139;
+    --color-success: 34 197 94;
+    --color-danger: 239 68 68;
+    --color-warning: 245 158 11;
+    
+    /* Spacing tokens */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    --spacing-3xl: 4rem;
+    
+    /* Shadow tokens */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   }
-  a:hover {
-    color: #747bff;
+  
+  * {
+    @apply border-secondary-200;
   }
-  button {
-    background-color: #f9f9f9;
+  
+  body {
+    @apply bg-secondary-50 text-secondary-900;
+  }
+}
+
+@layer utilities {
+  /* CSS Logical Properties for RTL support */
+  .ms-auto {
+    margin-inline-start: auto;
+  }
+  
+  .me-auto {
+    margin-inline-end: auto;
+  }
+  
+  .ps-2 {
+    padding-inline-start: 0.5rem;
+  }
+  
+  .pe-2 {
+    padding-inline-end: 0.5rem;
+  }
+  
+  .ps-3 {
+    padding-inline-start: 0.75rem;
+  }
+  
+  .pe-3 {
+    padding-inline-end: 0.75rem;
+  }
+  
+  .ps-4 {
+    padding-inline-start: 1rem;
+  }
+  
+  .pe-4 {
+    padding-inline-end: 1rem;
+  }
+  
+  .ps-6 {
+    padding-inline-start: 1.5rem;
+  }
+  
+  .pe-6 {
+    padding-inline-end: 1.5rem;
+  }
+  
+  .ms-2 {
+    margin-inline-start: 0.5rem;
+  }
+  
+  .me-2 {
+    margin-inline-end: 0.5rem;
+  }
+  
+  .ms-3 {
+    margin-inline-start: 0.75rem;
+  }
+  
+  .me-3 {
+    margin-inline-end: 0.75rem;
+  }
+  
+  .ms-4 {
+    margin-inline-start: 1rem;
+  }
+  
+  .me-4 {
+    margin-inline-end: 1rem;
+  }
+  
+  .start-0 {
+    inset-inline-start: 0;
+  }
+  
+  .end-0 {
+    inset-inline-end: 0;
+  }
+  
+  .text-start {
+    text-align: start;
+  }
+  
+  .text-end {
+    text-align: end;
+  }
+  
+  .border-s {
+    border-inline-start-width: 1px;
+  }
+  
+  .border-e {
+    border-inline-end-width: 1px;
   }
 }
