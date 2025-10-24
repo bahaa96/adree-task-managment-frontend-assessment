@@ -86,50 +86,29 @@ export const Layout = ({ children }: LayoutProps) => {
               </span>
             </Link>
 
-            {/* Navigation and actions */}
-            <div className="flex items-center space-x-8">
-              {/* Desktop Navigation */}
-              <nav
-                className="hidden lg:flex items-center space-x-8"
-                role="navigation"
-              >
-                {navigationItems.map((item) => {
-                  const isActive = isActiveRoute(item.href);
-                  return (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      className={`text-sm font-medium transition-colors duration-150 ${
-                        isActive
-                          ? 'text-primary-600 border-b-2 border-primary-600 pb-1'
-                          : 'text-gray-500 hover:text-gray-900'
-                      }`}
-                      aria-current={isActive ? 'page' : undefined}
-                    >
-                      {item.name}
-                    </Link>
-                  );
-                })}
-              </nav>
-
-              {/* Create Task Button */}
-              <Button variant="primary" size="sm" className="hidden sm:flex">
-                <svg
-                  className="h-4 w-4 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-                Create Task
-              </Button>
-            </div>
+            {/* Navigation */}
+            <nav
+              className="hidden lg:flex items-center space-x-8"
+              role="navigation"
+            >
+              {navigationItems.map((item) => {
+                const isActive = isActiveRoute(item.href);
+                return (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={`text-sm font-medium transition-colors duration-150 ${
+                      isActive
+                        ? 'text-primary-600 border-b-2 border-primary-600 pb-1'
+                        : 'text-gray-500 hover:text-gray-900'
+                    }`}
+                    aria-current={isActive ? 'page' : undefined}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
+            </nav>
           </div>
         </div>
       </header>
