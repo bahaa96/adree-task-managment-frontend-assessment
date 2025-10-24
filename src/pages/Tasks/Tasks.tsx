@@ -7,6 +7,7 @@ import { LoadingSpinner } from '@/components';
 import { useAllTasks } from '../Dashboard/useAllTasks';
 import { useIsMobile } from '@/components/Layout/useMediaQuery';
 import { useDeleteTask } from './useDeleteTask';
+import { useCreateTask } from './useCreateTask';
 import type { Task } from '@/domain-models';
 import { TaskStatus, TaskCategory } from '@/domain-models';
 import { cn } from '@/lib/cn';
@@ -20,9 +21,19 @@ export const Tasks = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
   const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    dueDate: '',
+    assignedTo: '',
+    status: TaskStatus.TODO,
+    category: TaskCategory.DEVELOPMENT,
+    estimatedHours: 1,
+  });
 
   const isMobile = useIsMobile();
   const { deleteTask } = useDeleteTask();
+  const { createTask, isLoading: isCreating, error: createError } = useCreateTask();
 
   const {
     tasks,
@@ -100,6 +111,52 @@ export const Tasks = () => {
 
   const handleCreateCancel = () => {
     setCreateModalOpen(false);
+    setFormData({
+      title: '',
+      description: '',
+      dueDate: '',
+      assignedTo: '',
+      status: TaskStatus.TODO,
+      category: TaskCategory.DEVELOPMENT,
+      estimatedHours: 1,
+    });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === 'estimatedHours' ? parseFloat(value) || 0 : value
+    }));
+  };
+
+  const handleCreateSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const taskData = {
+      title: formData.title,
+      description: formData.description,
+      dueDate: formData.dueDate,
+      assignedTo: formData.assignedTo,
+      status: formData.status,
+      category: formData.category,
+      estimatedHours: formData.estimatedHours,
+    };
+
+    const newTask = await createTask(taskData);
+    if (newTask) {
+      setCreateModalOpen(false);
+      setFormData({
+        title: '',
+        description: '',
+        dueDate: '',
+        assignedTo: '',
+        status: TaskStatus.TODO,
+        category: TaskCategory.DEVELOPMENT,
+        estimatedHours: 1,
+      });
+      fetchTasks(); // Refresh the list
+    }
   };
 
   const getStatusBadgeVariant = (status: TaskStatus) => {
@@ -405,23 +462,169 @@ export const Tasks = () => {
       {/* Create Task Modal */}
       {createModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Create New Task</h3>
-            <p className="text-gray-600 mb-6">
-              Task creation functionality would be implemented here. This is a placeholder modal.
-            </p>
-            <div className="flex justify-end space-x-4">
-              <Button
-                variant="ghost"
-                onClick={handleCreateCancel}
-                className="text-gray-700 hover:bg-gray-100"
-              >
-                Cancel
-              </Button>
-              <Button variant="primary" onClick={handleCreateCancel}>
-                Create Task
-              </Button>
-            </div>
+          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h3 className="text-lg font-medium text-gray-900 mb-6">Create New Task</h3>
+
+            <form onSubmit={handleCreateSubmit} className="space-y-4">
+              {/* Title */}
+              <div>
+                <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+                  Title *
+                </label>
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  placeholder="Enter task title"
+                />
+              </div>
+
+              {/* Description */}
+              <div>
+                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+                  Description
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  placeholder="Enter task description"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Due Date */}
+                <div>
+                  <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 mb-1">
+                    Due Date *
+                  </label>
+                  <input
+                    type="date"
+                    id="dueDate"
+                    name="dueDate"
+                    value={formData.dueDate}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+
+                {/* Assigned To */}
+                <div>
+                  <label htmlFor="assignedTo" className="block text-sm font-medium text-gray-700 mb-1">
+                    Assigned To *
+                  </label>
+                  <input
+                    type="text"
+                    id="assignedTo"
+                    name="assignedTo"
+                    value={formData.assignedTo}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="Enter assignee name"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Status */}
+                <div>
+                  <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
+                    Status *
+                  </label>
+                  <select
+                    id="status"
+                    name="status"
+                    value={formData.status}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  >
+                    <option value={TaskStatus.TODO}>To Do</option>
+                    <option value={TaskStatus.IN_PROGRESS}>In Progress</option>
+                    <option value={TaskStatus.COMPLETED}>Completed</option>
+                  </select>
+                </div>
+
+                {/* Category */}
+                <div>
+                  <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+                    Category *
+                  </label>
+                  <select
+                    id="category"
+                    name="category"
+                    value={formData.category}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  >
+                    <option value={TaskCategory.DEVELOPMENT}>Development</option>
+                    <option value={TaskCategory.DESIGN}>Design</option>
+                    <option value={TaskCategory.TESTING}>Testing</option>
+                    <option value={TaskCategory.DOCUMENTATION}>Documentation</option>
+                    <option value={TaskCategory.MEETING}>Meeting</option>
+                    <option value={TaskCategory.RESEARCH}>Research</option>
+                    <option value={TaskCategory.BUG_FIX}>Bug Fix</option>
+                    <option value={TaskCategory.FEATURE}>Feature</option>
+                  </select>
+                </div>
+
+                {/* Estimated Hours */}
+                <div>
+                  <label htmlFor="estimatedHours" className="block text-sm font-medium text-gray-700 mb-1">
+                    Est. Hours *
+                  </label>
+                  <input
+                    type="number"
+                    id="estimatedHours"
+                    name="estimatedHours"
+                    value={formData.estimatedHours}
+                    onChange={handleInputChange}
+                    required
+                    min="0.5"
+                    step="0.5"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+              </div>
+
+              {/* Error Message */}
+              {createError && (
+                <div className="text-red-600 text-sm">
+                  Error creating task: {String(createError)}
+                </div>
+              )}
+
+              {/* Form Actions */}
+              <div className="flex justify-end space-x-4 pt-4">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={handleCreateCancel}
+                  className="text-gray-700 hover:bg-gray-100"
+                  disabled={isCreating}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  disabled={isCreating}
+                  loading={isCreating}
+                >
+                  {isCreating ? 'Creating...' : 'Create Task'}
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
       )}
