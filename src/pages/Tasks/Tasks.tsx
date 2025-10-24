@@ -6,6 +6,7 @@ import { Button } from '@/components';
 import { LoadingSpinner } from '@/components';
 import { useAllTasks } from '../Dashboard/useAllTasks';
 import { useIsMobile } from '@/components/Layout/useMediaQuery';
+import { useDeleteTask } from './useDeleteTask';
 import type { Task } from '@/domain-models';
 import { TaskStatus, TaskCategory } from '@/domain-models';
 import { cn } from '@/lib/cn';
@@ -16,8 +17,12 @@ export const Tasks = () => {
   const [searchText, setSearchText] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [categoryFilter, setCategoryFilter] = useState<string>('');
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
 
   const isMobile = useIsMobile();
+  const { deleteTask } = useDeleteTask();
 
   const {
     tasks,
@@ -70,6 +75,33 @@ export const Tasks = () => {
     }
   };
 
+  const handleDeleteClick = (task: Task) => {
+    setTaskToDelete(task);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (taskToDelete) {
+      await deleteTask(taskToDelete.id);
+      setDeleteModalOpen(false);
+      setTaskToDelete(null);
+      fetchTasks(); // Refresh the list
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+    setTaskToDelete(null);
+  };
+
+  const handleCreateTask = () => {
+    setCreateModalOpen(true);
+  };
+
+  const handleCreateCancel = () => {
+    setCreateModalOpen(false);
+  };
+
   const getStatusBadgeVariant = (status: TaskStatus) => {
     switch (status) {
       case TaskStatus.COMPLETED:
@@ -108,7 +140,7 @@ export const Tasks = () => {
           <p className="text-gray-600 mt-1">Manage and track all your tasks</p>
         </div>
 
-        <Button variant="primary" className="mt-4 sm:mt-0">
+        <Button variant="primary" className="mt-4 sm:mt-0" onClick={handleCreateTask}>
           <svg
             className="h-4 w-4 mr-2"
             fill="none"
@@ -227,7 +259,7 @@ export const Tasks = () => {
                         <Button variant="ghost" size="sm">
                           Edit
                         </Button>
-                        <Button variant="danger" size="sm">
+                        <Button variant="danger" size="sm" onClick={() => handleDeleteClick(task)}>
                           Delete
                         </Button>
                       </div>
@@ -314,7 +346,7 @@ export const Tasks = () => {
                       <Button variant="ghost" size="sm">
                         Edit
                       </Button>
-                      <Button variant="danger" size="sm">
+                      <Button variant="danger" size="sm" onClick={() => handleDeleteClick(task)}>
                         Delete
                       </Button>
                     </div>
@@ -343,6 +375,54 @@ export const Tasks = () => {
               </Button>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteModalOpen && taskToDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Delete Task</h3>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete "{taskToDelete.title}"? This action cannot be undone.
+            </p>
+            <div className="flex justify-end space-x-4">
+              <Button
+                variant="ghost"
+                onClick={handleDeleteCancel}
+                className="text-gray-700 hover:bg-gray-100"
+              >
+                Cancel
+              </Button>
+              <Button variant="danger" onClick={handleDeleteConfirm}>
+                Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Task Modal */}
+      {createModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Create New Task</h3>
+            <p className="text-gray-600 mb-6">
+              Task creation functionality would be implemented here. This is a placeholder modal.
+            </p>
+            <div className="flex justify-end space-x-4">
+              <Button
+                variant="ghost"
+                onClick={handleCreateCancel}
+                className="text-gray-700 hover:bg-gray-100"
+              >
+                Cancel
+              </Button>
+              <Button variant="primary" onClick={handleCreateCancel}>
+                Create Task
+              </Button>
+            </div>
+          </div>
         </div>
       )}
     </div>

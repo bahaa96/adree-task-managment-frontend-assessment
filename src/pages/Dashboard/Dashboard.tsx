@@ -239,9 +239,10 @@ export const Dashboard = () => {
               className={cn(
                 'px-4 py-2 text-sm font-medium transition-colors',
                 selectedTimeRange === range
-                  ? 'bg-primary-600 text-white'
+                  ? 'bg-primary-600 hover:bg-primary-700'
                   : 'bg-white text-gray-700 hover:bg-gray-50'
               )}
+              style={selectedTimeRange === range ? { color: '#1e293b' } : {}}
             >
               {range === '7days'
                 ? '7 Days'

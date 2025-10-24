@@ -74,14 +74,11 @@ export const Layout = ({ children }: LayoutProps) => {
         className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30"
         role="banner"
       >
-        <div className="px-6 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
+        <div className="px-6 sm:px-8 lg:px-20 xl:px-24 2xl:px-40">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
             <Link to="/" className="flex items-center">
-              <div className="h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">T</span>
-              </div>
-              <span className="ml-2 text-xl font-semibold text-gray-900 hidden sm:block">
+              <span className="text-xl font-semibold text-gray-900">
                 TaskMaster
               </span>
             </Link>
