@@ -135,7 +135,7 @@ export const Layout = ({ children }: LayoutProps) => {
       </header>
 
       {/* Main Content Area */}
-      <main id="main-content" role="main">
+      <main id="main-content" role="main" className="lg:px-12 xl:px-16 2xl:px-24">
         {children}
       </main>
 
