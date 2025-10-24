@@ -47,8 +47,9 @@ export const useSingleTask = (
 
       setTask(response.data);
     } catch (err) {
-      if (err instanceof Error && err.name !== 'AbortError') {
-        setError(err.message);
+      // Only show error if request wasn't cancelled
+      if (!abortControllerRef.current?.signal.aborted) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
         setTask(null);
       }
     } finally {

@@ -5,6 +5,7 @@ import viteCompression from 'vite-plugin-compression'
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 import removeConsole from 'vite-plugin-remove-console'
 import tailwindcss from '@tailwindcss/vite'
+import autoprefixer from 'autoprefixer'
 
 const ReactCompilerConfig = {}
 
@@ -30,6 +31,13 @@ export default defineConfig({
     ViteImageOptimizer(),
     removeConsole(),
   ],
+  css: {
+    postcss: {
+      plugins: [
+        autoprefixer,
+      ],
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

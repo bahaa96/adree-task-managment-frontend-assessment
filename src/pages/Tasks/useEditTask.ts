@@ -73,10 +73,10 @@ const useEditTask = () => {
 
       return response.data;
     } catch (error) {
-      if (controller.signal.aborted) {
-        return false;
+      // Only show error if request wasn't cancelled
+      if (!controller.signal.aborted) {
+        dispatch({ type: "EDIT_ERROR", error });
       }
-      dispatch({ type: "EDIT_ERROR", error });
       return null;
     }
   }, []);

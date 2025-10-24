@@ -72,10 +72,10 @@ const useCreateTask = () => {
 
       return response.data;
     } catch (error) {
-      if (controller.signal.aborted) {
-        return false;
+      // Only show error if request wasn't cancelled
+      if (!controller.signal.aborted) {
+        dispatch({ type: "CREATE_ERROR", error });
       }
-      dispatch({ type: "CREATE_ERROR", error });
       return null;
     }
   }, []);

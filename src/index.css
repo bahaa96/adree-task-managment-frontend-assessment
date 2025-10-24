@@ -1,32 +1,69 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
   :root {
-    /* Color tokens */
-    --color-primary: 14 165 233;
-    --color-secondary: 100 116 139;
-    --color-success: 34 197 94;
-    --color-danger: 239 68 68;
-    --color-warning: 245 158 11;
-    
-    /* Spacing tokens */
-    --spacing-xs: 0.25rem;
-    --spacing-sm: 0.5rem;
-    --spacing-md: 1rem;
-    --spacing-lg: 1.5rem;
-    --spacing-xl: 2rem;
-    --spacing-2xl: 3rem;
-    --spacing-3xl: 4rem;
-    
-    /* Shadow tokens */
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    /* Color tokens for Tailwind v4 */
+    --color-primary: #0ea5e9;
+    --color-primary-50: #f0f9ff;
+    --color-primary-100: #e0f2fe;
+    --color-primary-200: #bae6fd;
+    --color-primary-300: #7dd3fc;
+    --color-primary-400: #38bdf8;
+    --color-primary-500: #0ea5e9;
+    --color-primary-600: #0284c7;
+    --color-primary-700: #0369a1;
+    --color-primary-800: #075985;
+    --color-primary-900: #0c4a6e;
+
+    --color-secondary: #64748b;
+    --color-secondary-50: #f8fafc;
+    --color-secondary-100: #f1f5f9;
+    --color-secondary-200: #e2e8f0;
+    --color-secondary-300: #cbd5e1;
+    --color-secondary-400: #94a3b8;
+    --color-secondary-500: #64748b;
+    --color-secondary-600: #475569;
+    --color-secondary-700: #334155;
+    --color-secondary-800: #1e293b;
+    --color-secondary-900: #0f172a;
+
+    --color-success: #22c55e;
+    --color-success-50: #f0fdf4;
+    --color-success-100: #dcfce7;
+    --color-success-200: #bbf7d0;
+    --color-success-300: #86efac;
+    --color-success-400: #4ade80;
+    --color-success-500: #22c55e;
+    --color-success-600: #16a34a;
+    --color-success-700: #15803d;
+    --color-success-800: #166534;
+    --color-success-900: #14532d;
+
+    --color-danger: #ef4444;
+    --color-danger-50: #fef2f2;
+    --color-danger-100: #fee2e2;
+    --color-danger-200: #fecaca;
+    --color-danger-300: #fca5a5;
+    --color-danger-400: #f87171;
+    --color-danger-500: #ef4444;
+    --color-danger-600: #dc2626;
+    --color-danger-700: #b91c1c;
+    --color-danger-800: #991b1b;
+    --color-danger-900: #7f1d1d;
+
+    --color-warning: #f59e0b;
+    --color-warning-50: #fffbeb;
+    --color-warning-100: #fef3c7;
+    --color-warning-200: #fde68a;
+    --color-warning-300: #fcd34d;
+    --color-warning-400: #fbbf24;
+    --color-warning-500: #f59e0b;
+    --color-warning-600: #d97706;
+    --color-warning-700: #b45309;
+    --color-warning-800: #92400e;
+    --color-warning-900: #78350f;
   }
-  
-    
+
   body {
     background-color: rgb(248 250 252);
     color: rgb(31 41 55);
@@ -38,87 +75,87 @@
   .ms-auto {
     margin-inline-start: auto;
   }
-  
+
   .me-auto {
     margin-inline-end: auto;
   }
-  
+
   .ps-2 {
     padding-inline-start: 0.5rem;
   }
-  
+
   .pe-2 {
     padding-inline-end: 0.5rem;
   }
-  
+
   .ps-3 {
     padding-inline-start: 0.75rem;
   }
-  
+
   .pe-3 {
     padding-inline-end: 0.75rem;
   }
-  
+
   .ps-4 {
     padding-inline-start: 1rem;
   }
-  
+
   .pe-4 {
     padding-inline-end: 1rem;
   }
-  
+
   .ps-6 {
     padding-inline-start: 1.5rem;
   }
-  
+
   .pe-6 {
     padding-inline-end: 1.5rem;
   }
-  
+
   .ms-2 {
     margin-inline-start: 0.5rem;
   }
-  
+
   .me-2 {
     margin-inline-end: 0.5rem;
   }
-  
+
   .ms-3 {
     margin-inline-start: 0.75rem;
   }
-  
+
   .me-3 {
     margin-inline-end: 0.75rem;
   }
-  
+
   .ms-4 {
     margin-inline-start: 1rem;
   }
-  
+
   .me-4 {
     margin-inline-end: 1rem;
   }
-  
+
   .start-0 {
     inset-inline-start: 0;
   }
-  
+
   .end-0 {
     inset-inline-end: 0;
   }
-  
+
   .text-start {
     text-align: start;
   }
-  
+
   .text-end {
     text-align: end;
   }
-  
+
   .border-s {
     border-inline-start-width: 1px;
   }
-  
+
   .border-e {
     border-inline-end-width: 1px;
   }
