@@ -13,32 +13,25 @@ type Action =
   | { type: "EDIT_SUCCESS"; data: Task }
   | { type: "EDIT_ERROR"; error: unknown };
 
-interface ActionHandlers {
-  [key in Action["type"]]: (
-    state: State,
-    action: Extract<Action, { type: key }>
-  ) => State;
-}
-
 const initialState: State = {
   isLoading: false,
   data: null,
   error: null,
 };
 
-const actionHandlers: ActionHandlers = {
-  EDIT_START: (state, _action) => ({
+const actionHandlers = {
+  EDIT_START: (state: State, _action: Action) => ({
     ...state,
     isLoading: true,
     data: null,
     error: null,
   }),
-  EDIT_SUCCESS: (state, { data }) => ({
+  EDIT_SUCCESS: (state: State, { data }: { data: Task }) => ({
     ...state,
     isLoading: false,
     data,
   }),
-  EDIT_ERROR: (state, { error }) => ({
+  EDIT_ERROR: (state: State, { error }: { error: unknown }) => ({
     ...state,
     isLoading: false,
     error,
@@ -46,7 +39,16 @@ const actionHandlers: ActionHandlers = {
 };
 
 function reducer(state: State = initialState, action: Action): State {
-  return actionHandlers[action.type]?.(state, action as any) || state;
+  switch (action.type) {
+    case "EDIT_START":
+      return actionHandlers.EDIT_START(state, action);
+    case "EDIT_SUCCESS":
+      return actionHandlers.EDIT_SUCCESS(state, action);
+    case "EDIT_ERROR":
+      return actionHandlers.EDIT_ERROR(state, action);
+    default:
+      return state;
+  }
 }
 
 const useEditTask = () => {

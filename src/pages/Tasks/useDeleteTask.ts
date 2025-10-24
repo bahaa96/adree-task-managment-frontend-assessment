@@ -12,32 +12,25 @@ type Action =
   | { type: "DELETE_SUCCESS" }
   | { type: "DELETE_ERROR"; error: unknown };
 
-interface ActionHandlers {
-  [key in Action["type"]]: (
-    state: State,
-    action: Extract<Action, { type: key }>
-  ) => State;
-}
-
 const initialState: State = {
   isLoading: false,
   data: null,
   error: null,
 };
 
-const actionHandlers: ActionHandlers = {
-  DELETE_START: (state, _action) => ({
+const actionHandlers = {
+  DELETE_START: (state: State, _action: Action) => ({
     ...state,
     isLoading: true,
     data: null,
     error: null,
   }),
-  DELETE_SUCCESS: (state) => ({
+  DELETE_SUCCESS: (state: State, _action: Action) => ({
     ...state,
     isLoading: false,
     data: true,
   }),
-  DELETE_ERROR: (state, { error }) => ({
+  DELETE_ERROR: (state: State, { error }: { error: unknown }) => ({
     ...state,
     isLoading: false,
     error,
@@ -45,7 +38,16 @@ const actionHandlers: ActionHandlers = {
 };
 
 function reducer(state: State = initialState, action: Action): State {
-  return actionHandlers[action.type]?.(state, action as any) || state;
+  switch (action.type) {
+    case "DELETE_START":
+      return actionHandlers.DELETE_START(state, action);
+    case "DELETE_SUCCESS":
+      return actionHandlers.DELETE_SUCCESS(state, action);
+    case "DELETE_ERROR":
+      return actionHandlers.DELETE_ERROR(state, action);
+    default:
+      return state;
+  }
 }
 
 const useDeleteTask = () => {

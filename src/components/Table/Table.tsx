@@ -1,4 +1,5 @@
-import { HTMLAttributes, forwardRef, TableHTMLAttributes } from 'react';
+import type { HTMLAttributes, TableHTMLAttributes } from 'react';
+import { forwardRef } from 'react';
 import { cn } from '@/lib/cn';
 
 export interface TableProps extends TableHTMLAttributes<HTMLTableElement> {
@@ -133,11 +134,3 @@ export const Table = Object.assign(TableRoot, {
   Cell: TableCell,
   Head: TableHead,
 });
-
-export type {
-  TableHeaderProps,
-  TableBodyProps,
-  TableRowProps,
-  TableCellProps,
-  TableHeadProps,
-};

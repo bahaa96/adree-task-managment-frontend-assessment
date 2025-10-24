@@ -1,7 +1,7 @@
-import { HTMLAttributes } from 'react';
+import type { HTMLAttributes } from 'react';
 import { cn } from '@/lib/cn';
 
-export type BadgeVariant = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'default';
+export type BadgeVariant = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'default' | 'ghost';
 export type BadgeSize = 'sm' | 'md' | 'lg';
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
@@ -16,6 +16,7 @@ const variantClasses: Record<BadgeVariant, string> = {
   danger: 'bg-danger-100 text-danger-700 border-danger-200',
   warning: 'bg-warning-100 text-warning-700 border-warning-200',
   default: 'bg-secondary-50 text-secondary-600 border-secondary-200',
+  ghost: 'bg-transparent text-secondary-600 border border-secondary-200',
 };
 
 const sizeClasses: Record<BadgeSize, string> = {

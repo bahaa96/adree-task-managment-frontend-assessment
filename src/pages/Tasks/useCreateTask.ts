@@ -13,32 +13,25 @@ type Action =
   | { type: "CREATE_SUCCESS"; data: Task }
   | { type: "CREATE_ERROR"; error: unknown };
 
-interface ActionHandlers {
-  [key in Action["type"]]: (
-    state: State,
-    action: Extract<Action, { type: key }>
-  ) => State;
-}
-
 const initialState: State = {
   isLoading: false,
   data: null,
   error: null,
 };
 
-const actionHandlers: ActionHandlers = {
-  CREATE_START: (state, _action) => ({
+const actionHandlers = {
+  CREATE_START: (state: State, _action: Action) => ({
     ...state,
     isLoading: true,
     data: null,
     error: null,
   }),
-  CREATE_SUCCESS: (state, { data }) => ({
+  CREATE_SUCCESS: (state: State, { data }: { data: Task }) => ({
     ...state,
     isLoading: false,
     data,
   }),
-  CREATE_ERROR: (state, { error }) => ({
+  CREATE_ERROR: (state: State, { error }: { error: unknown }) => ({
     ...state,
     isLoading: false,
     error,
@@ -46,7 +39,16 @@ const actionHandlers: ActionHandlers = {
 };
 
 function reducer(state: State = initialState, action: Action): State {
-  return actionHandlers[action.type]?.(state, action as any) || state;
+  switch (action.type) {
+    case "CREATE_START":
+      return actionHandlers.CREATE_START(state, action);
+    case "CREATE_SUCCESS":
+      return actionHandlers.CREATE_SUCCESS(state, action);
+    case "CREATE_ERROR":
+      return actionHandlers.CREATE_ERROR(state, action);
+    default:
+      return state;
+  }
 }
 
 const useCreateTask = () => {

@@ -10,7 +10,6 @@ import { useDeleteTask } from './useDeleteTask';
 import { useCreateTask } from './useCreateTask';
 import type { Task } from '@/domain-models';
 import { TaskStatus, TaskCategory } from '@/domain-models';
-import { cn } from '@/lib/cn';
 
 export const Tasks = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -437,23 +436,52 @@ export const Tasks = () => {
 
       {/* Delete Confirmation Modal */}
       {deleteModalOpen && taskToDelete && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Delete Task</h3>
-            <p className="text-gray-600 mb-6">
-              Are you sure you want to delete "{taskToDelete.title}"? This action cannot be undone.
-            </p>
-            <div className="flex justify-end space-x-4">
-              <Button
-                variant="ghost"
-                onClick={handleDeleteCancel}
-                className="text-gray-700 hover:bg-gray-100"
-              >
-                Cancel
-              </Button>
-              <Button variant="danger" onClick={handleDeleteConfirm}>
-                Delete
-              </Button>
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
+          <div className="h-full flex flex-col justify-end">
+            <div className="bg-white rounded-t-2xl p-6 w-full transform transition-transform duration-300 ease-out md:hidden md:rounded-lg md:max-w-md md:w-full md:mx-auto md:mt-8 md:mb-auto md:self-center">
+              {/* Mobile drag handle */}
+              <div className="md:hidden flex justify-center mb-4">
+                <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
+              </div>
+
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Delete Task</h3>
+              <p className="text-gray-600 mb-6">
+                Are you sure you want to delete "{taskToDelete.title}"? This action cannot be undone.
+              </p>
+              <div className="flex justify-end space-x-4">
+                <Button
+                  variant="ghost"
+                  onClick={handleDeleteCancel}
+                  className="text-gray-700 hover:bg-gray-100"
+                >
+                  Cancel
+                </Button>
+                <Button variant="danger" onClick={handleDeleteConfirm}>
+                  Delete
+                </Button>
+              </div>
+            </div>
+
+            {/* Desktop version */}
+            <div className="hidden md:flex items-center justify-center h-full">
+              <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Delete Task</h3>
+                <p className="text-gray-600 mb-6">
+                  Are you sure you want to delete "{taskToDelete.title}"? This action cannot be undone.
+                </p>
+                <div className="flex justify-end space-x-4">
+                  <Button
+                    variant="ghost"
+                    onClick={handleDeleteCancel}
+                    className="text-gray-700 hover:bg-gray-100"
+                  >
+                    Cancel
+                  </Button>
+                  <Button variant="danger" onClick={handleDeleteConfirm}>
+                    Delete
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -461,11 +489,18 @@ export const Tasks = () => {
 
       {/* Create Task Modal */}
       {createModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-medium text-gray-900 mb-6">Create New Task</h3>
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
+          <div className="h-full flex flex-col justify-end">
+            {/* Mobile version - Bottom Sheet */}
+            <div className="bg-white rounded-t-2xl p-6 w-full max-h-[90vh] overflow-y-auto transform transition-transform duration-300 ease-out md:hidden">
+              {/* Mobile drag handle */}
+              <div className="flex justify-center mb-4">
+                <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
+              </div>
 
-            <form onSubmit={handleCreateSubmit} className="space-y-4">
+              <h3 className="text-lg font-medium text-gray-900 mb-6">Create New Task</h3>
+
+              <form onSubmit={handleCreateSubmit} className="space-y-4">
               {/* Title */}
               <div>
                 <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
@@ -478,7 +513,7 @@ export const Tasks = () => {
                   value={formData.title}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 border-2 border-primary-500 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white text-gray-900 placeholder-gray-500"
                   placeholder="Enter task title"
                 />
               </div>
@@ -494,7 +529,7 @@ export const Tasks = () => {
                   value={formData.description}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 border-2 border-primary-500 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white text-gray-900 placeholder-gray-500 resize-none"
                   placeholder="Enter task description"
                 />
               </div>
@@ -512,7 +547,7 @@ export const Tasks = () => {
                     value={formData.dueDate}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2 border-2 border-primary-500 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white text-gray-900 placeholder-gray-500"
                   />
                 </div>
 
@@ -528,7 +563,7 @@ export const Tasks = () => {
                     value={formData.assignedTo}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2 border-2 border-primary-500 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white text-gray-900 placeholder-gray-500"
                     placeholder="Enter assignee name"
                   />
                 </div>
@@ -546,7 +581,7 @@ export const Tasks = () => {
                     value={formData.status}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2 border-2 border-primary-500 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white text-gray-900 placeholder-gray-500"
                   >
                     <option value={TaskStatus.TODO}>To Do</option>
                     <option value={TaskStatus.IN_PROGRESS}>In Progress</option>
@@ -565,7 +600,7 @@ export const Tasks = () => {
                     value={formData.category}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2 border-2 border-primary-500 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white text-gray-900 placeholder-gray-500"
                   >
                     <option value={TaskCategory.DEVELOPMENT}>Development</option>
                     <option value={TaskCategory.DESIGN}>Design</option>
@@ -592,7 +627,7 @@ export const Tasks = () => {
                     required
                     min="0.5"
                     step="0.5"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2 border-2 border-primary-500 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white text-gray-900 placeholder-gray-500"
                   />
                 </div>
               </div>
@@ -625,6 +660,175 @@ export const Tasks = () => {
                 </Button>
               </div>
             </form>
+            </div>
+
+            {/* Desktop version - Centered Modal */}
+            <div className="hidden md:flex items-center justify-center h-full">
+              <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                <h3 className="text-lg font-medium text-gray-900 mb-6">Create New Task</h3>
+
+                <form onSubmit={handleCreateSubmit} className="space-y-4">
+                  {/* Title */}
+                  <div>
+                    <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+                      Title *
+                    </label>
+                    <input
+                      type="text"
+                      id="title-desktop"
+                      name="title"
+                      value={formData.title}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-2 border-2 border-primary-500 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white text-gray-900 placeholder-gray-500"
+                      placeholder="Enter task title"
+                    />
+                  </div>
+
+                  {/* Description */}
+                  <div>
+                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+                      Description
+                    </label>
+                    <textarea
+                      id="description-desktop"
+                      name="description"
+                      value={formData.description}
+                      onChange={handleInputChange}
+                      rows={3}
+                      className="w-full px-4 py-2 border-2 border-primary-500 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white text-gray-900 placeholder-gray-500 resize-none"
+                      placeholder="Enter task description"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Due Date */}
+                    <div>
+                      <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 mb-1">
+                        Due Date *
+                      </label>
+                      <input
+                        type="date"
+                        id="dueDate-desktop"
+                        name="dueDate"
+                        value={formData.dueDate}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-2 border-2 border-primary-500 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white text-gray-900 placeholder-gray-500"
+                      />
+                    </div>
+
+                    {/* Assigned To */}
+                    <div>
+                      <label htmlFor="assignedTo" className="block text-sm font-medium text-gray-700 mb-1">
+                        Assigned To *
+                      </label>
+                      <input
+                        type="text"
+                        id="assignedTo-desktop"
+                        name="assignedTo"
+                        value={formData.assignedTo}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-2 border-2 border-primary-500 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white text-gray-900 placeholder-gray-500"
+                        placeholder="Enter assignee name"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Status */}
+                    <div>
+                      <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
+                        Status *
+                      </label>
+                      <select
+                        id="status-desktop"
+                        name="status"
+                        value={formData.status}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-2 border-2 border-primary-500 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white text-gray-900 placeholder-gray-500"
+                      >
+                        <option value={TaskStatus.TODO}>To Do</option>
+                        <option value={TaskStatus.IN_PROGRESS}>In Progress</option>
+                        <option value={TaskStatus.COMPLETED}>Completed</option>
+                      </select>
+                    </div>
+
+                    {/* Category */}
+                    <div>
+                      <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+                        Category *
+                      </label>
+                      <select
+                        id="category-desktop"
+                        name="category"
+                        value={formData.category}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-2 border-2 border-primary-500 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white text-gray-900 placeholder-gray-500"
+                      >
+                        <option value={TaskCategory.DEVELOPMENT}>Development</option>
+                        <option value={TaskCategory.DESIGN}>Design</option>
+                        <option value={TaskCategory.TESTING}>Testing</option>
+                        <option value={TaskCategory.DOCUMENTATION}>Documentation</option>
+                        <option value={TaskCategory.MEETING}>Meeting</option>
+                        <option value={TaskCategory.RESEARCH}>Research</option>
+                        <option value={TaskCategory.BUG_FIX}>Bug Fix</option>
+                        <option value={TaskCategory.FEATURE}>Feature</option>
+                      </select>
+                    </div>
+
+                    {/* Estimated Hours */}
+                    <div>
+                      <label htmlFor="estimatedHours" className="block text-sm font-medium text-gray-700 mb-1">
+                        Est. Hours *
+                      </label>
+                      <input
+                        type="number"
+                        id="estimatedHours-desktop"
+                        name="estimatedHours"
+                        value={formData.estimatedHours}
+                        onChange={handleInputChange}
+                        required
+                        min="0.5"
+                        step="0.5"
+                        className="w-full px-4 py-2 border-2 border-primary-500 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white text-gray-900 placeholder-gray-500"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Error Message */}
+                  {createError && (
+                    <div className="text-red-600 text-sm">
+                      Error creating task: {String(createError)}
+                    </div>
+                  )}
+
+                  {/* Form Actions */}
+                  <div className="flex justify-end space-x-4 pt-4">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={handleCreateCancel}
+                      className="text-gray-700 hover:bg-gray-100"
+                      disabled={isCreating}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      disabled={isCreating}
+                      loading={isCreating}
+                    >
+                      {isCreating ? 'Creating...' : 'Create Task'}
+                    </Button>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       )}

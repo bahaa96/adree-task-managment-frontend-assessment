@@ -18,7 +18,7 @@ import { useAllTasks } from './useAllTasks';
 import { TaskStatus } from '@/domain-models';
 import { cn } from '@/lib/cn';
 
-interface MetricsData {
+export interface MetricsData {
   totalTasks: number;
   openTasks: number;
   completedTasks: number;
