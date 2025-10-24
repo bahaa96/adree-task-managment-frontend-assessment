@@ -1,5 +1,5 @@
 import instance from './instance';
-import { Task } from '@/domain-models';
+import type { Task } from '@/domain-models';
 
 interface RequestFetchAllTasksArgs {
   page: number;

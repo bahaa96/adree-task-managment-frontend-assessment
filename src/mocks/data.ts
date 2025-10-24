@@ -1,4 +1,5 @@
-import { Task, TaskStatus, TaskCategory } from '@/domain-models';
+import type { Task } from '@/domain-models';
+import { TaskStatus, TaskCategory } from '@/domain-models';
 
 const generateId = () => Math.random().toString(36).substr(2, 9);
 

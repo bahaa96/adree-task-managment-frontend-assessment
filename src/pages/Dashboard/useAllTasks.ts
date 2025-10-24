@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   requestFetchAllTasks,
-  RequestFetchAllTasksArgs,
-  RequestFetchAllTasksResponse,
+  type RequestFetchAllTasksArgs,
+  type RequestFetchAllTasksResponse,
 } from '@/network';
-import { Task } from '@/domain-models';
+import type { Task } from '@/domain-models';
 
 interface UseAllTasksOptions {
   immediate?: boolean;
@@ -77,7 +77,7 @@ export const useAllTasks = (
         setLoading(false);
       }
     },
-    [currentParams]
+    []
   );
 
   const fetchNextPage = useCallback(async () => {
@@ -89,7 +89,7 @@ export const useAllTasks = (
       ...currentParams,
       page: meta.page + 1,
     });
-  }, [fetchTasks, currentParams, meta]);
+  }, [fetchTasks, meta]);
 
   const refetch = useCallback(async () => {
     await fetchTasks(initialParams);

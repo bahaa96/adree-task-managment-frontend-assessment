@@ -1,6 +1,6 @@
 import { requestCreateTask } from "@/network";
 import { useReducer, useCallback } from "react";
-import { Task } from "@/domain-models";
+import type { Task } from "@/domain-models";
 
 interface State {
   isLoading: boolean;

@@ -15,7 +15,7 @@ import {
 import { Card } from '@/components';
 import { Badge } from '@/components';
 import { useAllTasks } from './useAllTasks';
-import { Task, TaskStatus, TaskCategory } from '@/domain-models';
+import { TaskStatus } from '@/domain-models';
 import { cn } from '@/lib/cn';
 
 interface MetricsData {
@@ -43,48 +43,46 @@ const COLORS = {
 };
 
 export const Dashboard = () => {
-  const [selectedTimeRange, setSelectedTimeRange] = useState<'7days' | '30days' | 'all'>('30days');
+  const [selectedTimeRange, setSelectedTimeRange] = useState<
+    '7days' | '30days' | 'all'
+  >('30days');
 
-  const {
-    tasks,
-    loading,
-    error,
-    fetchTasks,
-  } = useAllTasks({
+  const { tasks, loading, error, refetch } = useAllTasks({
     page: 1,
     pageSize: 1000, // Get all tasks for dashboard analytics
     sortBy: 'createdAt',
     sortOrder: 'desc',
   });
 
-  useEffect(() => {
-    fetchTasks();
-  }, [fetchTasks]);
-
   // Calculate metrics
   const metrics = useMemo((): MetricsData => {
-    if (!tasks.length) return {
-      totalTasks: 0,
-      openTasks: 0,
-      completedTasks: 0,
-      averageHours: 0,
-      overdueTasks: 0,
-    };
+    if (!tasks.length)
+      return {
+        totalTasks: 0,
+        openTasks: 0,
+        completedTasks: 0,
+        averageHours: 0,
+        overdueTasks: 0,
+      };
 
-    const openTasks = tasks.filter(task =>
-      task.status === TaskStatus.TODO || task.status === TaskStatus.IN_PROGRESS
+    const openTasks = tasks.filter(
+      (task) =>
+        task.status === TaskStatus.TODO ||
+        task.status === TaskStatus.IN_PROGRESS
     ).length;
 
-    const completedTasks = tasks.filter(task =>
-      task.status === TaskStatus.COMPLETED
+    const completedTasks = tasks.filter(
+      (task) => task.status === TaskStatus.COMPLETED
     ).length;
 
-    const overdueTasks = tasks.filter(task =>
-      new Date(task.dueDate) < new Date() && task.status !== TaskStatus.COMPLETED
+    const overdueTasks = tasks.filter(
+      (task) =>
+        new Date(task.dueDate) < new Date() &&
+        task.status !== TaskStatus.COMPLETED
     ).length;
 
-    const averageHours = tasks.reduce((sum, task) =>
-      sum + task.estimatedHours, 0) / tasks.length;
+    const averageHours =
+      tasks.reduce((sum, task) => sum + task.estimatedHours, 0) / tasks.length;
 
     return {
       totalTasks: tasks.length,
@@ -99,14 +97,16 @@ export const Dashboard = () => {
   const categoryData = useMemo(() => {
     const categoryCount: Record<string, number> = {};
 
-    tasks.forEach(task => {
+    tasks.forEach((task) => {
       categoryCount[task.category] = (categoryCount[task.category] || 0) + 1;
     });
 
     return Object.entries(categoryCount).map(([category, count]) => ({
       name: category.replace('_', ' '),
       value: count,
-      color: COLORS[category.toLowerCase() as keyof typeof COLORS] || COLORS.secondary,
+      color:
+        COLORS[category.toLowerCase() as keyof typeof COLORS] ||
+        COLORS.secondary,
     }));
   }, [tasks]);
 
@@ -118,7 +118,7 @@ export const Dashboard = () => {
       [TaskStatus.OVERDUE]: 0,
     };
 
-    tasks.forEach(task => {
+    tasks.forEach((task) => {
       statusCount[task.status] = (statusCount[task.status] || 0) + 1;
     });
 
@@ -126,17 +126,23 @@ export const Dashboard = () => {
       name: status.replace('_', ' '),
       value: count,
       color:
-        status === TaskStatus.COMPLETED ? COLORS.success :
-        status === TaskStatus.OVERDUE ? COLORS.danger :
-        status === TaskStatus.IN_PROGRESS ? COLORS.warning :
-        COLORS.primary,
+        status === TaskStatus.COMPLETED
+          ? COLORS.success
+          : status === TaskStatus.OVERDUE
+            ? COLORS.danger
+            : status === TaskStatus.IN_PROGRESS
+              ? COLORS.warning
+              : COLORS.primary,
     }));
   }, [tasks]);
 
   // Recent activities (last 5 tasks)
   const recentTasks = useMemo(() => {
     return tasks
-      .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+      )
       .slice(0, 5);
   }, [tasks]);
 
@@ -152,10 +158,12 @@ export const Dashboard = () => {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
-          <div className="text-red-600 text-lg font-medium mb-2">Error loading dashboard</div>
+          <div className="text-red-600 text-lg font-medium mb-2">
+            Error loading dashboard
+          </div>
           <div className="text-gray-500 mb-4">{String(error)}</div>
           <button
-            onClick={() => fetchTasks()}
+            onClick={() => refetch()}
             className="bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors"
           >
             Try Again
@@ -165,7 +173,13 @@ export const Dashboard = () => {
     );
   }
 
-  const MetricCard = ({ title, value, subtitle, trend, color }: {
+  const MetricCard = ({
+    title,
+    value,
+    subtitle,
+    trend,
+    color,
+  }: {
     title: string;
     value: string | number;
     subtitle?: string;
@@ -179,24 +193,27 @@ export const Dashboard = () => {
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className={cn("text-2xl font-bold", color)}>
-            {value}
-          </p>
-          {subtitle && (
-            <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
-          )}
+          <p className={cn('text-2xl font-bold', color)}>{value}</p>
+          {subtitle && <p className="text-sm text-gray-500 mt-1">{subtitle}</p>}
           {trend && (
-            <div className={cn(
-              "flex items-center text-sm mt-2",
-              trend.isPositive ? "text-green-600" : "text-red-600"
-            )}>
-              <span>{trend.isPositive ? "↑" : "↓"}</span>
+            <div
+              className={cn(
+                'flex items-center text-sm mt-2',
+                trend.isPositive ? 'text-green-600' : 'text-red-600'
+              )}
+            >
+              <span>{trend.isPositive ? '↑' : '↓'}</span>
               <span className="ml-1">{Math.abs(trend.value)}%</span>
             </div>
           )}
         </div>
-        <div className={cn("p-3 rounded-lg bg-opacity-10", color.replace('text-', 'bg-'))}>
-          <div className={cn("w-6 h-6", color)}></div>
+        <div
+          className={cn(
+            'p-3 rounded-lg bg-opacity-10',
+            color.replace('text-', 'bg-')
+          )}
+        >
+          <div className={cn('w-6 h-6', color)}></div>
         </div>
       </div>
     </Card>
@@ -208,7 +225,9 @@ export const Dashboard = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600 mt-1">Overview of your tasks and productivity</p>
+          <p className="text-gray-600 mt-1">
+            Overview of your tasks and productivity
+          </p>
         </div>
 
         {/* Time Range Selector */}
@@ -218,13 +237,17 @@ export const Dashboard = () => {
               key={range}
               onClick={() => setSelectedTimeRange(range)}
               className={cn(
-                "px-4 py-2 text-sm font-medium transition-colors",
+                'px-4 py-2 text-sm font-medium transition-colors',
                 selectedTimeRange === range
-                  ? "bg-primary-600 text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-50"
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-50'
               )}
             >
-              {range === '7days' ? '7 Days' : range === '30days' ? '30 Days' : 'All Time'}
+              {range === '7days'
+                ? '7 Days'
+                : range === '30days'
+                  ? '30 Days'
+                  : 'All Time'}
             </button>
           ))}
         </div>
@@ -261,7 +284,9 @@ export const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Tasks by Category */}
         <Card className="p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Tasks by Category</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            Tasks by Category
+          </h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={categoryData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -281,7 +306,9 @@ export const Dashboard = () => {
 
         {/* Tasks by Status */}
         <Card className="p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Tasks by Status</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            Tasks by Status
+          </h2>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
@@ -289,7 +316,9 @@ export const Dashboard = () => {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                label={({ name, percent }) =>
+                  `${name}: ${(percent * 100).toFixed(0)}%`
+                }
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
@@ -317,7 +346,9 @@ export const Dashboard = () => {
 
       {/* Recent Activity */}
       <Card className="p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          Recent Activity
+        </h2>
         {recentTasks.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
             No recent activity
@@ -325,17 +356,26 @@ export const Dashboard = () => {
         ) : (
           <div className="space-y-4">
             {recentTasks.map((task) => (
-              <div key={task.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div
+                key={task.id}
+                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+              >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-3">
                     <h3 className="font-medium text-gray-900 truncate">
                       {task.title}
                     </h3>
-                    <Badge variant={
-                      task.status === TaskStatus.COMPLETED ? 'success' :
-                      task.status === TaskStatus.OVERDUE ? 'danger' :
-                      task.status === TaskStatus.IN_PROGRESS ? 'secondary' : 'ghost'
-                    }>
+                    <Badge
+                      variant={
+                        task.status === TaskStatus.COMPLETED
+                          ? 'success'
+                          : task.status === TaskStatus.OVERDUE
+                            ? 'danger'
+                            : task.status === TaskStatus.IN_PROGRESS
+                              ? 'secondary'
+                              : 'ghost'
+                      }
+                    >
                       {task.status.replace('_', ' ')}
                     </Badge>
                   </div>

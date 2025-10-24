@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { requestFetchSingleTask } from '@/network';
-import { Task } from '@/domain-models';
+import type { Task } from '@/domain-models';
 
 interface UseSingleTaskOptions {
   immediate?: boolean;
@@ -72,7 +72,7 @@ export const useSingleTask = (
         abortControllerRef.current.abort();
       }
     };
-  }, [id, options.immediate, fetchTask]);
+  }, [id, options.immediate]);
 
   return {
     task,

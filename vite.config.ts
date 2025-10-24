@@ -4,6 +4,7 @@ import path from 'path'
 import viteCompression from 'vite-plugin-compression'
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 import removeConsole from 'vite-plugin-remove-console'
+import tailwindcss from '@tailwindcss/vite'
 
 const ReactCompilerConfig = {}
 
@@ -17,6 +18,7 @@ export default defineConfig({
         ],
       },
     }),
+    tailwindcss(),
     viteCompression({
       algorithm: 'brotliCompress',
       exclude: [/\.(br)$/, /\.(gz)$/],

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "slash": {
+      "command": "/Users/lina/projects/slash/target/release/slash",
+      "args": [
+        "--mcp-server"
+      ],
+      "cwd": "/Users/lina/projects/slash"
+    }
+  }
+}

@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components';
-import { cn } from '@/lib/cn';
 import { useIsMobile } from './useMediaQuery';
 
 interface LayoutProps {
@@ -28,7 +27,7 @@ export const Layout = ({ children }: LayoutProps) => {
         setSidebarOpen(false);
       }
     };
-
+    l;
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isMobile, sidebarOpen]);

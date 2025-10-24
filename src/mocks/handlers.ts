@@ -1,10 +1,10 @@
 import { http, HttpResponse } from 'msw';
 import { mockTasks, addMockTask, updateMockTask, deleteMockTask } from './data';
-import { Task } from '@/domain-models';
+import type { Task } from '@/domain-models';
 
 export const handlers = [
   // Get all tasks with pagination, search, and filter
-  http.get('/api/tasks', ({ request }) => {
+  http.get('http://localhost:3000/api/tasks', ({ request }) => {
     const url = new URL(request.url);
     const page = parseInt(url.searchParams.get('page') || '1');
     const pageSize = parseInt(url.searchParams.get('pageSize') || '10');
@@ -68,7 +68,7 @@ export const handlers = [
   }),
 
   // Get single task
-  http.get('/api/tasks/:id', ({ params }) => {
+  http.get('http://localhost:3000/api/tasks/:id', ({ params }) => {
     const { id } = params;
     const task = mockTasks.find((t) => t.id === id);
 
@@ -83,7 +83,7 @@ export const handlers = [
   }),
 
   // Create task
-  http.post('/api/tasks', async ({ request }) => {
+  http.post('http://localhost:3000/api/tasks', async ({ request }) => {
     const body = await request.json() as Omit<Task, 'id' | 'createdAt' | 'updatedAt'>;
     const newTask = addMockTask(body);
 
@@ -91,7 +91,7 @@ export const handlers = [
   }),
 
   // Update task
-  http.put('/api/tasks/:id', async ({ params, request }) => {
+  http.put('http://localhost:3000/api/tasks/:id', async ({ params, request }) => {
     const { id } = params;
     const updates = await request.json() as Partial<Task>;
     const updatedTask = updateMockTask(id as string, updates);
@@ -107,7 +107,7 @@ export const handlers = [
   }),
 
   // Delete task
-  http.delete('/api/tasks/:id', ({ params }) => {
+  http.delete('http://localhost:3000/api/tasks/:id', ({ params }) => {
     const { id } = params;
     const deleted = deleteMockTask(id as string);
 

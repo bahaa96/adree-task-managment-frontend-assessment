@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { requestFetchAllTasks } from './tasks';
-import { Task, TaskStatus, TaskCategory } from '@/domain-models';
+import type { Task } from '@/domain-models';
+import { TaskStatus, TaskCategory } from '@/domain-models';
 
 // Mock axios instance
 vi.mock('./instance', () => ({

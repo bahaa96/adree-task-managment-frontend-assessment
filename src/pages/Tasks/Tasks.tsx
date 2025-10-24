@@ -5,8 +5,9 @@ import { Badge } from '@/components';
 import { Button } from '@/components';
 import { LoadingSpinner } from '@/components';
 import { useAllTasks } from '../Dashboard/useAllTasks';
-import { useIsMobile, useInfiniteScroll } from './useMediaQuery';
-import { Task, TaskStatus, TaskCategory } from '@/domain-models';
+import { useIsMobile } from '@/components/Layout/useMediaQuery';
+import type { Task } from '@/domain-models';
+import { TaskStatus, TaskCategory } from '@/domain-models';
 import { cn } from '@/lib/cn';
 
 export const Tasks = () => {
@@ -26,24 +27,29 @@ export const Tasks = () => {
     fetchTasks,
     hasNextPage,
     fetchNextPage,
-  } = useAllTasks({
-    page: currentPage,
-    pageSize,
-    searchText,
-    status: statusFilter,
-    category: categoryFilter,
-    sortBy: 'createdAt',
-    sortOrder: 'desc',
-  }, { immediate: true });
-
-  useEffect(() => {
-    fetchTasks({
+  } = useAllTasks(
+    {
       page: currentPage,
       pageSize,
       searchText,
       status: statusFilter,
       category: categoryFilter,
-    });
+      sortBy: 'createdAt',
+      sortOrder: 'desc',
+    },
+    { immediate: true }
+  );
+
+  useEffect(() => {
+    if (currentPage > 1) {
+      fetchTasks({
+        page: currentPage,
+        pageSize,
+        searchText,
+        status: statusFilter,
+        category: categoryFilter,
+      });
+    }
   }, [currentPage, fetchTasks]);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -81,12 +87,11 @@ export const Tasks = () => {
     return (
       <div className="p-6">
         <Card className="p-6 text-center">
-          <div className="text-red-600 text-lg font-medium mb-2">Error loading tasks</div>
+          <div className="text-red-600 text-lg font-medium mb-2">
+            Error loading tasks
+          </div>
           <div className="text-gray-500 mb-4">{String(error)}</div>
-          <Button
-            variant="primary"
-            onClick={() => fetchTasks()}
-          >
+          <Button variant="primary" onClick={() => fetchTasks()}>
             Try Again
           </Button>
         </Card>
@@ -104,8 +109,18 @@ export const Tasks = () => {
         </div>
 
         <Button variant="primary" className="mt-4 sm:mt-0">
-          <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          <svg
+            className="h-4 w-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 4v16m8-8H4"
+            />
           </svg>
           Create Task
         </Button>
@@ -186,7 +201,9 @@ export const Tasks = () => {
                   <Table.Row key={task.id}>
                     <Table.Cell>
                       <div>
-                        <div className="font-medium text-gray-900">{task.title}</div>
+                        <div className="font-medium text-gray-900">
+                          {task.title}
+                        </div>
                         {task.description && (
                           <div className="text-sm text-gray-500 line-clamp-2">
                             {task.description}
@@ -222,9 +239,7 @@ export const Tasks = () => {
           )}
 
           {!loading && tasks.length === 0 && (
-            <div className="text-center py-8 text-gray-500">
-              No tasks found
-            </div>
+            <div className="text-center py-8 text-gray-500">No tasks found</div>
           )}
 
           {/* Pagination */}
@@ -284,7 +299,9 @@ export const Tasks = () => {
                   </div>
 
                   <div className="flex items-center text-sm text-gray-500 space-x-4">
-                    <span className="capitalize">{task.category.replace('_', ' ')}</span>
+                    <span className="capitalize">
+                      {task.category.replace('_', ' ')}
+                    </span>
                     <span>{task.assignedTo}</span>
                     <span>{task.estimatedHours}h</span>
                   </div>

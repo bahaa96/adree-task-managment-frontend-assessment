@@ -125,7 +125,7 @@ describe('Accessibility Tests', () => {
     cy.get('button').should('have.css', 'cursor');
   });
 
-  it('should have accessible images and media', () {
+  it('should have accessible images and media', () => {
     // If there are images, they should have alt text
     cy.get('img').each(($img) => {
       cy.wrap($img).should('have.attr', 'alt');
