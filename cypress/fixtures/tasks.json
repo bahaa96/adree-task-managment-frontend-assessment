@@ -1,0 +1,74 @@
+[
+  {
+    "id": "1",
+    "title": "Complete project documentation",
+    "description": "Write comprehensive documentation for the task management application including API docs, user guide, and deployment instructions.",
+    "status": "in-progress",
+    "priority": "high",
+    "createdAt": "2024-01-15T10:00:00Z",
+    "updatedAt": "2024-01-16T14:30:00Z"
+  },
+  {
+    "id": "2",
+    "title": "Implement user authentication",
+    "description": "Add login and registration functionality with JWT tokens and role-based access control.",
+    "status": "todo",
+    "priority": "high",
+    "createdAt": "2024-01-14T09:00:00Z",
+    "updatedAt": "2024-01-14T09:00:00Z"
+  },
+  {
+    "id": "3",
+    "title": "Fix responsive layout issues",
+    "description": "Address mobile/tablet layout problems identified during testing. Focus on navigation and task list views.",
+    "status": "completed",
+    "priority": "medium",
+    "createdAt": "2024-01-13T11:00:00Z",
+    "updatedAt": "2024-01-15T16:45:00Z"
+  },
+  {
+    "id": "4",
+    "title": "Optimize database queries",
+    "description": "Review and optimize slow-running queries, add appropriate indexes, and implement query caching.",
+    "status": "todo",
+    "priority": "medium",
+    "createdAt": "2024-01-12T13:00:00Z",
+    "updatedAt": "2024-01-12T13:00:00Z"
+  },
+  {
+    "id": "5",
+    "title": "Add export functionality",
+    "description": "Allow users to export tasks to CSV, PDF, and Excel formats with filtering options.",
+    "status": "in-progress",
+    "priority": "low",
+    "createdAt": "2024-01-11T15:00:00Z",
+    "updatedAt": "2024-01-14T10:20:00Z"
+  },
+  {
+    "id": "6",
+    "title": "Setup CI/CD pipeline",
+    "description": "Configure automated testing, building, and deployment using GitHub Actions.",
+    "status": "completed",
+    "priority": "high",
+    "createdAt": "2024-01-10T08:00:00Z",
+    "updatedAt": "2024-01-12T17:30:00Z"
+  },
+  {
+    "id": "7",
+    "title": "Implement dark mode",
+    "description": "Add dark theme support with system preference detection and manual toggle.",
+    "status": "todo",
+    "priority": "low",
+    "createdAt": "2024-01-09T14:00:00Z",
+    "updatedAt": "2024-01-09T14:00:00Z"
+  },
+  {
+    "id": "8",
+    "title": "Add task templates",
+    "description": "Create pre-defined task templates for common project types and workflows.",
+    "status": "completed",
+    "priority": "medium",
+    "createdAt": "2024-01-08T10:00:00Z",
+    "updatedAt": "2024-01-11T12:15:00Z"
+  }
+]

@@ -3,14 +3,17 @@ import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components';
 import { cn } from '@/lib/cn';
+import { useIsMobile } from './useMediaQuery';
 
 interface LayoutProps {
   children: ReactNode;
 }
-
-
-
-const isMobile = () => false; // Simplified for single language use
+export const Layout = ({ children }: LayoutProps) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
+  const isMobile = useIsMobile();
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
 
   // Close sidebar on mobile when clicking outside or on route change
   useEffect(() => {
@@ -64,8 +67,18 @@ const isMobile = () => false; // Simplified for single language use
       name: 'Dashboard',
       href: '/dashboard',
       icon: (
-        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        <svg
+          className="h-5 w-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+          />
         </svg>
       ),
     },
@@ -73,18 +86,30 @@ const isMobile = () => false; // Simplified for single language use
       name: 'Tasks',
       href: '/tasks',
       icon: (
-        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+        <svg
+          className="h-5 w-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+          />
         </svg>
       ),
     },
   ];
 
   const isActiveRoute = (href: string) => {
-    return location.pathname === href || (href === '/dashboard' && location.pathname === '/');
+    return (
+      location.pathname === href ||
+      (href === '/dashboard' && location.pathname === '/')
+    );
   };
 
-  
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Skip link for accessibility */}
@@ -122,14 +147,28 @@ const isMobile = () => false; // Simplified for single language use
               onClick={() => setSidebarOpen(false)}
               aria-label="Close menu"
             >
-              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </Button>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 space-y-1 px-3 py-4" role="navigation" aria-label="Main navigation">
+          <nav
+            className="flex-1 space-y-1 px-3 py-4"
+            role="navigation"
+            aria-label="Main navigation"
+          >
             {navigationItems.map((item) => {
               const isActive = isActiveRoute(item.href);
               return (
@@ -137,15 +176,19 @@ const isMobile = () => false; // Simplified for single language use
                   key={item.name}
                   to={item.href}
                   className={`group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-150 ${
-                      isActive
-                        ? 'bg-primary-100 text-primary-700 border-l-4 border-primary-600'
-                        : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                    }`}
+                    isActive
+                      ? 'bg-primary-100 text-primary-700 border-l-4 border-primary-600'
+                      : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                  }`}
                   aria-current={isActive ? 'page' : undefined}
                 >
-                  <span className={`flex-shrink-0 mr-3 h-5 w-5 ${
-                      isActive ? 'text-primary-500' : 'text-gray-400 group-hover:text-gray-500'
-                    }`}>
+                  <span
+                    className={`flex-shrink-0 mr-3 h-5 w-5 ${
+                      isActive
+                        ? 'text-primary-500'
+                        : 'text-gray-400 group-hover:text-gray-500'
+                    }`}
+                  >
                     {item.icon}
                   </span>
                   <span className="flex-1">{item.name}</span>
@@ -175,8 +218,18 @@ const isMobile = () => false; // Simplified for single language use
                   className="lg:hidden mr-3"
                   aria-label="Open menu"
                 >
-                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
                   </svg>
                 </Button>
 
@@ -194,7 +247,10 @@ const isMobile = () => false; // Simplified for single language use
               {/* Right side - Navigation and actions */}
               <div className="flex items-center space-x-4">
                 {/* Desktop Navigation */}
-                <nav className="hidden lg:flex items-center space-x-8" role="navigation">
+                <nav
+                  className="hidden lg:flex items-center space-x-8"
+                  role="navigation"
+                >
                   {navigationItems.map((item) => {
                     const isActive = isActiveRoute(item.href);
                     return (
@@ -202,10 +258,10 @@ const isMobile = () => false; // Simplified for single language use
                         key={item.name}
                         to={item.href}
                         className={`text-sm font-medium transition-colors duration-150 ${
-                            isActive
-                              ? 'text-primary-600 border-b-2 border-primary-600 pb-1'
-                              : 'text-gray-500 hover:text-gray-900'
-                          }`}
+                          isActive
+                            ? 'text-primary-600 border-b-2 border-primary-600 pb-1'
+                            : 'text-gray-500 hover:text-gray-900'
+                        }`}
                         aria-current={isActive ? 'page' : undefined}
                       >
                         {item.name}
@@ -216,8 +272,18 @@ const isMobile = () => false; // Simplified for single language use
 
                 {/* Create Task Button */}
                 <Button variant="primary" size="sm" className="hidden sm:flex">
-                  <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  <svg
+                    className="h-4 w-4 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
                   </svg>
                   Create Task
                 </Button>
@@ -246,13 +312,17 @@ const isMobile = () => false; // Simplified for single language use
                     key={item.name}
                     to={item.href}
                     className={`flex flex-col items-center justify-center py-2 px-3 text-xs font-medium transition-colors duration-150 ${
-                      isActive ? 'text-primary-600' : 'text-gray-500 hover:text-gray-900'
+                      isActive
+                        ? 'text-primary-600'
+                        : 'text-gray-500 hover:text-gray-900'
                     }`}
                     aria-current={isActive ? 'page' : undefined}
                   >
-                    <span className={`mb-1 h-6 w-6 ${
-                      isActive ? 'text-primary-500' : 'text-gray-400'
-                    }`}>
+                    <span
+                      className={`mb-1 h-6 w-6 ${
+                        isActive ? 'text-primary-500' : 'text-gray-400'
+                      }`}
+                    >
                       {item.icon}
                     </span>
                     {item.name}
@@ -264,9 +334,7 @@ const isMobile = () => false; // Simplified for single language use
         )}
 
         {/* Add padding for mobile bottom navigation */}
-        {isMobile && (
-          <div className="h-16" />
-        )}
+        {isMobile && <div className="h-16" />}
       </div>
     </div>
   );
