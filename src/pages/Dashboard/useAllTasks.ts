@@ -48,7 +48,8 @@ export const useAllTasks = (
       }
 
       // Create new abort controller
-      abortControllerRef.current = new AbortController();
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
 
       try {
         setLoading(true);
@@ -57,7 +58,7 @@ export const useAllTasks = (
         const response = await requestFetchAllTasks({
           ...finalParams,
           options: {
-            signal: abortControllerRef.current.signal,
+            signal: controller.signal,
           },
         });
 
@@ -71,7 +72,7 @@ export const useAllTasks = (
         setMeta(response.meta);
       } catch (err) {
         // Only show error if request wasn't cancelled
-        if (!abortControllerRef.current?.signal.aborted) {
+        if (!controller.signal.aborted) {
           setError(err instanceof Error ? err.message : 'An error occurred');
         }
       } finally {

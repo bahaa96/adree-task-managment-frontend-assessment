@@ -32,7 +32,8 @@ export const useSingleTask = (
     }
 
     // Create new abort controller
-    abortControllerRef.current = new AbortController();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
     try {
       setLoading(true);
@@ -41,14 +42,14 @@ export const useSingleTask = (
       const response = await requestFetchSingleTask({
         id,
         options: {
-          signal: abortControllerRef.current.signal,
+          signal: controller.signal,
         },
       });
 
       setTask(response.data);
     } catch (err) {
       // Only show error if request wasn't cancelled
-      if (!abortControllerRef.current?.signal.aborted) {
+      if (!controller.signal.aborted) {
         setError(err instanceof Error ? err.message : 'An error occurred');
         setTask(null);
       }
